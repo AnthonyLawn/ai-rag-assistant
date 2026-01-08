@@ -4,8 +4,25 @@ from fastapi import UploadFile, File, APIRouter
 from ingestion.loaders import load_pdf, load_text
 from ingestion.chunking import chunk_text
 from ingestion.indexing import index_documents
+from pydantic import BaseModel
+from llm.generator import answer_query
 
 router = APIRouter()
+
+class QueryRequest(BaseModel):
+    query: str
+    k: int = 5
+
+
+@router.post("/query")
+async def query_endpoint(payload: QueryRequest):
+    """
+    Accepts a user query, runs the full RAG pipeline,
+    and returns the LLM-generated answer.
+    """
+    answer = answer_query(payload.query, k=payload.k)
+    return {"answer": answer}
+
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
