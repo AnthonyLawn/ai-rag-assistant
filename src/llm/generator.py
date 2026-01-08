@@ -1,8 +1,8 @@
 from groq import Groq
 from ..config import settings
 from .models import GROQ_DEFAULT_MODEL
-from llm.prompts import build_prompt
-from retrieval.search import retrieve
+from src.llm.prompts import build_prompt
+from src.retrieval.search import retrieve
 
 class LLMGenerator:
     def generate(self, prompt: str):
@@ -20,7 +20,7 @@ class GroqLLM(LLMGenerator):
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
         )
-        return response.choices[0].message["content"]
+        return response.choices[0].message.content
 
 
 def answer_query(query: str, k: int = 5) -> str:

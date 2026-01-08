@@ -1,6 +1,6 @@
 from chromadb import PersistentClient
 from chromadb.utils import embedding_functions
-from config import settings
+from src.config import settings
 
 
 class VectorStore:

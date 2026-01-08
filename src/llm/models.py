@@ -3,4 +3,4 @@ class LLMModel:
         self.model_name = model_name
 
 # Groq defaults
-GROQ_DEFAULT_MODEL = "llama3-8b-8192"
+GROQ_DEFAULT_MODEL = "llama-3.1-8b-instant"

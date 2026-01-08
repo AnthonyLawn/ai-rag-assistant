@@ -1,5 +1,5 @@
-from ingestion.embedder import Embedder
-from retrieval.vectorstore import VectorStore
+from src.ingestion.embedder import Embedder
+from src.retrieval.vectorstore import VectorStore
 
 
 def index_documents(chunks):

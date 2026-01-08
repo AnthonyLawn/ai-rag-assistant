@@ -1,11 +1,11 @@
 import os
 import tempfile
 from fastapi import UploadFile, File, APIRouter
-from ingestion.loaders import load_pdf, load_text
-from ingestion.chunking import chunk_text
-from ingestion.indexing import index_documents
+from src.ingestion.loaders import load_pdf, load_text
+from src.ingestion.chunking import chunk_text
+from src.ingestion.indexing import index_documents
 from pydantic import BaseModel
-from llm.generator import answer_query
+from src.llm.generator import answer_query
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from fastembed import TextEmbedding
 from typing import List
-from config import settings
+from src.config import settings
 
 
 class Embedder:

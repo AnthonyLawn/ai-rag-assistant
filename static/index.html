@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-3xl mx-auto py-10">
+        <h1 class="text-3xl font-bold mb-8 text-center">RAG Assistant</h1>
+
+        <!-- Upload Section -->
+        <div class="bg-white shadow rounded-lg p-6 mb-10">
+            <h2 class="text-xl font-semibold mb-4">Upload Document</h2>
+
+            <input id="fileInput" type="file"
+                   class="block w-full text-sm text-gray-700 mb-4" />
+
+            <button onclick="uploadFile()"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Upload
+            </button>
+
+            <p id="uploadStatus" class="mt-4 text-sm text-gray-600"></p>
+        </div>
+
+        <!-- Query Section -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Ask a Question</h2>
+
+            <textarea id="queryInput"
+                      class="w-full border rounded p-3 mb-4"
+                      rows="4"
+                      placeholder="Ask something about your uploaded documents..."></textarea>
+
+            <button onclick="sendQuery()"
+                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                Ask
+            </button>
+
+            <div id="answerBox" class="mt-6 p-4 bg-gray-50 border rounded hidden">
+                <h3 class="font-semibold mb-2">Answer:</h3>
+                <p id="answerText" class="whitespace-pre-wrap"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            const status = document.getElementById("uploadStatus");
+
+            if (!fileInput.files.length) {
+                status.textContent = "Please select a file first.";
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            status.textContent = "Uploading...";
+
+            const res = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await res.json();
+            status.textContent = "Upload complete. Chunks indexed: " + data.chunks_indexed;
+        }
+
+        async function sendQuery() {
+            const query = document.getElementById("queryInput").value;
+            const answerBox = document.getElementById("answerBox");
+            const answerText = document.getElementById("answerText");
+
+            answerText.textContent = "Thinking...";
+            answerBox.classList.remove("hidden");
+
+            const res = await fetch("/query", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query })
+            });
+
+            const data = await res.json();
+            answerText.textContent = data.answer;
+        }
+    </script>
+</body>
+</html>
