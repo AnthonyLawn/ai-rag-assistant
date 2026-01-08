@@ -1,5 +1,6 @@
 from groq import Groq
 from ..config import settings
+from .models import GROQ_DEFAULT_MODEL
 
 class LLMGenerator:
     def generate(self, prompt: str):
@@ -7,7 +8,7 @@ class LLMGenerator:
 
 
 class GroqLLM(LLMGenerator):
-    def __init__(self, model_name: str = "llama3-8b-8192"):
+    def __init__(self, model_name: str = GROQ_DEFAULT_MODEL):
         self.client = Groq(api_key=settings.groq_api_key)
         self.model_name = model_name
 
